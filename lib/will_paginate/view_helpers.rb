@@ -30,7 +30,8 @@ module WillPaginate
       :param_name     => :page,
       :params         => nil,
       :page_links     => true,
-      :container      => true
+      :container      => true,
+      :show_always    => false
 
     label_deprecation = Proc.new { |key, value|
       "set the 'will_paginate.#{key}' key in your i18n locale instead of editing pagination_options" if defined? Rails
@@ -42,7 +43,7 @@ module WillPaginate
 
     # Returns HTML representing page links for a WillPaginate::Collection-like object.
     # In case there is no more than one page in total, nil is returned.
-    # 
+    #
     # ==== Options
     # * <tt>:class</tt> -- CSS class name for the generated DIV (default: "pagination")
     # * <tt>:previous_label</tt> -- default: "« Previous"
@@ -61,7 +62,7 @@ module WillPaginate
     #
     # All options not recognized by will_paginate will become HTML attributes on the container
     # element for pagination links (the DIV). For example:
-    # 
+    #
     #   <%= will_paginate @posts, :style => 'color:blue' %>
     #
     # will result in:
@@ -70,7 +71,7 @@ module WillPaginate
     #
     def will_paginate(collection, options = {})
       # early exit if there is nothing to render
-      return nil unless collection.total_pages > 1
+      return nil unless collection.total_pages > 1 || options[:show_always]
 
       options = WillPaginate::ViewHelpers.pagination_options.merge(options)
 
